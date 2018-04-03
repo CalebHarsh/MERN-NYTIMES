@@ -36,6 +36,7 @@ class Saved extends Component {
               key={article._id}
               title={article.title}
               href={article.href}
+              date={article.date}
               data={article._id}
               BtnType="remove"
               BtnName="Delete"
