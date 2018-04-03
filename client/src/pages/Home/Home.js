@@ -11,16 +11,13 @@ class Home extends Component {
     endYear: "",
     startYear: ""
   }
-  
+
   getNewsArticles = () => {
-    console.log("geting articles")
-    console.log(this.state)
     API.getNewsArticles({
       topic: this.state.topic,
       endYear: this.state.endYear,
       startYear: this.state.startYear
     }).then(res => {
-      console.log(res.data)
       this.setState({
         topic: "",
         endYear: "",
@@ -28,45 +25,47 @@ class Home extends Component {
         articles: res.data.response.docs
       })
     })
+      .catch(err => console.log(err))
   }
 
   onInputChange = e => {
-    const {name, value} = e.target
-    this.setState({[name]: value})
+    const { name, value } = e.target
+    this.setState({ [name]: value })
   }
 
   saveArticle = e => {
-    const savArt = e.target.getAttribute("data-article")
+    const savArt = JSON.parse(e.target.dataset.article)
     API.saveArticle(savArt).then(res => {
-
+      alert(`Article '${res.data.title}' Saved`)
     })
+      .catch(err => console.log(err))
   }
 
   render() {
     return (
       <div className="container">
         <Card head="Search">
-          <Search 
+          <Search
             topic={this.state.topic}
             endYear={this.state.endYear}
             startYear={this.state.startYear}
             onInput={this.onInputChange}
-            onClick={this.getNewsArticles}/>
+            onClick={this.getNewsArticles} />
         </Card>
 
         <Card head="Articles">
-        { this.state.articles.length !== 0 ? this.state.articles.map(article => (
-          <Article
-            key={article.web_url}
-            title={article.headline.main}
-            href={article.web_url}
-            data={article}
-            BtnType="save"
-            BtnName="Save"
-            BtnClick={this.saveArticle}
-          />
-        )) : <h2 className="text-center"> No Articles Found </h2>}
-          
+          {this.state.articles.length !== 0 ? this.state.articles.map(article => (
+            <Article
+              key={article.web_url}
+              title={article.headline.main}
+              href={article.web_url}
+              data={JSON.stringify(article)}
+              BtnType="save"
+              BtnName="Save"
+              BtnClick={this.saveArticle}
+            />
+          )) : <h2 className="text-center"> No Articles Found </h2>}
+
         </Card>
       </div>
     )

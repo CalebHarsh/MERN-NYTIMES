@@ -8,38 +8,40 @@ class Saved extends Component {
   state = {
     articles: []
   }
-  
+
   componentDidMount() {
     API.getSaveArticles().then(res => {
       this.setState({
-        article: res.data
+        articles: res.data
       })
     })
   }
 
   removeArticle = e => {
     const remArt = e.target.getAttribute("data-article")
-    API.removeArticle(remArt).then(res => {
-      
+    API.deleteArticle(remArt).then(res => {
+      alert("Article Removed")
+      this.componentDidMount()
     })
+      .catch(err => console.log(err))
   }
-  
+
 
   render() {
     return (
       <div className="container">
         <Card head="Saved Articles" >
-        { this.state.articles.length !== 0 ? this.state.articles.map(article => (
-          <Article
-            key={article.web_url}
-            title={article.headline.main}
-            href={article.web_url}
-            data={article}
-            BtnType="remove"
-            BtnName="Delete"
-            BtnClick={this.removeArticle}
-          />
-        )) : <h2 className="text-center"> No Saved Articles Found </h2>}
+          {this.state.articles.length !== 0 ? this.state.articles.map(article => (
+            <Article
+              key={article._id}
+              title={article.title}
+              href={article.href}
+              data={article._id}
+              BtnType="remove"
+              BtnName="Delete"
+              BtnClick={this.removeArticle}
+            />
+          )) : <h2 className="text-center"> No Saved Articles Found </h2>}
         </Card>
       </div>
     )

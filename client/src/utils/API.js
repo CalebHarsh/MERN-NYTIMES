@@ -12,17 +12,21 @@ export default {
         "end_date": data.endYear
       }
     })
+      
+
   },
 
   getSaveArticles: () => {
     return axios.get("/api/articles")
+  
   },
 
   saveArticle: data => {
-    return axios.post("/api/articles")
+    return axios.post("/api/articles", data)
+
   },
 
   deleteArticle: data => {
-    return axios.delete("/api/articles")
+    return axios.delete(`/api/articles/${data}`)
   }
 }
